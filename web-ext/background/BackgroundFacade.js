@@ -14,7 +14,7 @@ class BackgroundFacade extends Facade {
         super();
         this.experiment = null;
         this.serverApi = new ServerAPI();
-        this.visible = false;
+        this.visible = true;
     }
 
     static getSingleton() {

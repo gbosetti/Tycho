@@ -1,9 +1,8 @@
 //These globals are a very bad idea
-var enabled = true;
 var facade = BackgroundFacade.getSingleton();
 
 var updateIcon = function() {
-    if (!enabled) {
+    if (!facade.visible) {
         browser.browserAction.setIcon({ path: "resources/wen-disabled.png" });
     } else {
         browser.browserAction.setIcon({ path: "resources/wen-enabled.png" });
@@ -11,9 +10,11 @@ var updateIcon = function() {
 };
 
 var startBackground = function(config) {
-    facade = BackgroundFacade.getSingleton();
-    facade.setApiUrl(config.apiUrl);
-    enabled = facade.visible;
+
+    console.log(config.storageStrategy);
+    var storage = new window[config.storageStrategy](config.storageParameters); 
+    console.log(storage);
+    facade.setStorageStrategy(storage);
 
     browser.runtime.onMessage.addListener(rmcRequest => {
         return facade.handle(rmcRequest);
@@ -24,8 +25,8 @@ var startBackground = function(config) {
     });
 
     browser.browserAction.onClicked.addListener(() => {
-        enabled = !enabled;
-        facade.setVisible(enabled);
+        facade.visible = !facade.visible;
+        facade.setVisible(facade.visible);
         updateIcon();
     });
 
@@ -38,11 +39,22 @@ var startBackground = function(config) {
     updateIcon();
 };
 
+function checkExpectedParameters(config){
+
+    var foundParams = ["storageStrategy", "apiUrl"].filter(param => config.hasOwnProperty(param));
+    return (config.length == foundParams.length);
+}
+
 browser.storage.local.get("config").then(data => {
-    var config = data.config;
-    if (!config) {
-        config = { apiUrl: "http://localhost:8080/tycho-api" };
-        browser.storage.local.set({ config });
+
+    if (!checkExpectedParameters(data.config)) {
+
+        data.config = {
+        "storageStrategy": "RemoteLogsRepository",
+        "apiUrl": "http://localhost:8080/tycho-api"
+        };
+        //Si no se setea, se puede perder consistencia con lo que se lee en la pagina de config
+        browser.storage.local.set({ "config": data.config }).then(() => startBackground(data.config));
     }
-    startBackground(config);
+    else startBackground(data.config);
 });

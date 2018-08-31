@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function restoreOptions() {
     
   browser.storage.local.get("config").then(function setCurrentChoice(result) {
-    document.querySelector("#storage-startegy").value = result.config["storageStartegy"];
+    document.querySelector("#storage-startegy").value = result.config["storageStrategy"];
     document.querySelector("#api-url").value = result.config["apiUrl"];
     updateOptions();
   });
@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function restoreOptions() {
     e.preventDefault();
     browser.storage.local.set({
       "config": {
-        "storageStartegy": document.querySelector("#storage-startegy").value,
+        "storageStrategy": document.querySelector("#storage-startegy").value,
         "apiUrl": document.querySelector("#api-url").value
       }
     });
