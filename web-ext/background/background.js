@@ -10,7 +10,7 @@ var updateIcon = function() {
 };
 
 var updateFacadeStorage = function(config){
-    var storage = new window[config.storageStrategy](config.storageParameters); 
+    var storage = new window[config.storageStrategy](config); 
     facade.setStorageStrategy(storage);
 }
 

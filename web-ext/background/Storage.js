@@ -1,7 +1,4 @@
 class StorageStrategy {
-  setApiUrl(url) {
-    this.apiUrl = url;
-  }
   submit(payload, service) {};
   submitTaskReport(report) {
     this.submit(report, "/task-results/");
@@ -11,6 +8,11 @@ class StorageStrategy {
 window.StorageStrategy = StorageStrategy;
 
 class RemoteLogsRepository extends StorageStrategy {
+   
+  constructor(data){
+    super();
+    this.apiUrl = data.apiUrl;
+  }
 
   submit(payload, service) {
     

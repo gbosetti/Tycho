@@ -28,10 +28,6 @@ class BackgroundFacade extends Facade {
         return backgroundFacadeSingleton;
     }
 
-    setApiUrl(url) {
-        this.serverApi.setApiUrl(url);
-    }
-
     getExperiment() {
         return this.experiment;
     }

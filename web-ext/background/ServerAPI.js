@@ -5,19 +5,22 @@ class ServerAPI {
   }
 
   setStorageStrategy (storage) {
-      this.storageStrategy = storage;
+    this.storageStrategy = storage;
   }
   
   submit(payload, service) {
 
+    console.log("submit");
     this.storageStrategy.submit(payload, service);
   }
 
   submitTaskReport(report) {
+    console.log("submitTaskReport");
     this.storageStrategy.submitTaskReport(report);
   }
 
-  getExperimentDesignFromServer(){
-    return this.storageStrategy.getExperimentDesignFromServer();
+  getExperimentDesignFromServer(id){
+    console.log("getExperimentDesignFromServer > ", this.storageStrategy.constructor.name);
+    return this.storageStrategy.getExperimentDesignFromServer(id);
   }
 }
