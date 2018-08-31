@@ -1,0 +1,61 @@
+{  
+   "suggestedSampleId":"BurlyWoodPhoebe",
+   "notes":"a sample experiment",
+   "id":"demo",
+   "tasks":[  
+      {  
+         "notes":"Provides instructions for a task. Records time. Can pause and resume. Has a basic success condition.",
+         "isPrototype":true,
+         "name":"Basic task intructions",
+         "model":{  
+            "completionChoices":"#doneOrAbandon",
+            "id":"1",
+            "instructions":"Go to google and find an image that you like",
+            "successCondition":"true"
+         },
+         "componentClassname":"TaskInstructionsComponent"
+      },
+      {  
+         "notes":"A SUS questionaire.",
+         "isPrototype":true,
+         "name":"SUS questionaire",
+         "model":{  
+            "id":"2"
+         },
+         "componentClassname":"SUSComponent"
+      },
+      {  
+         "notes":"Blocks the entire screen to give the participant a message.",
+         "isPrototype":true,
+         "name":"Message screen",
+         "model":{  
+            "title":"Important!",
+            "message":"Pay attention to the instructions",
+            "id":"3"
+         },
+         "componentClassname":"MessageComponent"
+      },
+      {  
+         "notes":"Blocks the entire screen to show the participant a Youtube video.",
+         "isPrototype":true,
+         "name":"Youtube video",
+         "model":{  
+            "videoEmbedUrl":"https://www.youtube.com/embed/F9Bo89m2f6g",
+            "message":"I love Game of Thrones!",
+            "id":"4"
+         },
+         "componentClassname":"YoutubeVideoComponent"
+      },
+      {  
+         "notes":"A sequence of simple questions, to elicit very short answers.",
+         "isPrototype":true,
+         "name":"Simple questionaire",
+         "model":{  
+            "introduction":"Answer these questions succinctly - like if they were tweets",
+            "id":"5",
+            "questions":"How old are you?\r\nHow many hours a day do you spend in front of your device?"
+         },
+         "componentClassname":"QuestionaireComponent"
+      }
+   ]
+}

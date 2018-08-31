@@ -63,36 +63,25 @@ class LocalLogsRepository extends StorageStrategy {
    */
   getExperimentDesignFromServer(id) {
     return new Promise((resolve, reject) => {
-      axios
-        .get(this.apiUrl + "/experiments/" + id)
-        .then(response => {
-          resolve(response);
-        })
-        .catch(error => {
-          console.log("catched the error");
-          reject(error);
-        });
-    });
-  }
-  
-  pushItems(uri, itemType, params) {
 
-    var payload = Object.assign({}, {
-      type: itemType,
-      url: uri
-    }, params);
+      var experimentSpecUrl = browser.extension.getURL("experiment-definition.json");
+      var xhr = new XMLHttpRequest();
+      xhr.addEventListener("load", function(evt) {
 
-    browser.storage.local.get("config").then(function(result) {
-      console.log(result.config["items-storage-local-plugin-id"]);
-      browser.runtime
-        .sendMessage(result.config["items-storage-local-plugin-id"], {
-            methodName: "store", arguments: payload 
-        })
-        .catch((error) => {
-            console.log("Could not talk to the storage", error);
-            return Promise.reject("Could not talk to the storage");
-        });
-        return Promise.resolve(payload);
+        try{
+          var expSpec = JSON.parse(evt.target.response);
+          if(expSpec.id == id)
+            resolve({ "data": expSpec });
+          else {
+            console.log("The ids do not match");
+            reject()
+          }
+        }catch(err){ reject(err) }
+      });
+
+      // open synchronously
+      xhr.open("GET", experimentSpecUrl, false);
+      xhr.send();
     });
   }
 }

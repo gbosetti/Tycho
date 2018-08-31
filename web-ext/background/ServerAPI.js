@@ -10,12 +10,11 @@ class ServerAPI {
   
   submit(payload, service) {
 
-    console.log("submit");
     this.storageStrategy.submit(payload, service);
   }
 
   submitTaskReport(report) {
-    console.log("submitTaskReport");
+
     this.storageStrategy.submitTaskReport(report);
   }
 

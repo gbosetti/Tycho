@@ -34,8 +34,7 @@ var startBackground = function(config) {
 
     browser.storage.onChanged.addListener((change, area) => {
         if (area == "local" && change.config) {
-            //facade.setApiUrl(change.config.newValue.apiUrl);
-            updateFacadeStorage(change.config);
+            updateFacadeStorage(change.config.newValue);
         }
     });
 
@@ -53,7 +52,7 @@ browser.storage.local.get("config").then(data => {
     if (!checkExpectedParameters(data.config)) {
 
         data.config = {
-        "storageStrategy": "RemoteLogsRepository",
+        "storageStrategy": "LocalLogsRepository",
         "apiUrl": "http://localhost:8080/tycho-api"
         };
         //Si no se setea, se puede perder consistencia con lo que se lee en la pagina de config
