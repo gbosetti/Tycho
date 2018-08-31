@@ -50,10 +50,14 @@ class LocalLogsRepository extends StorageStrategy {
     browser.storage.local.get("experimentLogs").then(function(result) {
 
       if(result.experimentLogs){
-        console.log(result.experimentLogs);
-      }else result.experimentLogs = [console.log(payload)];
+        result.experimentLogs.push(payload);
+      }else result.experimentLogs = [payload];
 
-      console.log(result.experimentLogs);
+      console.log("SUBMITTING", result.experimentLogs);
+
+      browser.storage.local.set({
+        "experimentLogs": result.experimentLogs
+      });
     });
   }
 

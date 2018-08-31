@@ -49,6 +49,7 @@ function checkExpectedParameters(config){
 
 browser.storage.local.get("config").then(data => {
 
+    browser.storage.local.set({ "experimentLogs": [] }); //cada vez que se instancia, se borra el local storage
     if (!checkExpectedParameters(data.config)) {
 
         data.config = {
