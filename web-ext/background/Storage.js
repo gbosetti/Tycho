@@ -1,39 +1,77 @@
-class LogsRepository {
-  pushItems(uri, itemType, params) {} 
+class StorageStrategy {
+  setApiUrl(url) {
+    this.apiUrl = url;
+  }
+  submit(payload, service) {};
+  submitTaskReport(report) {
+    this.submit(report, "/task-results/");
+  }
+  getExperimentDesignFromServer(id) {};
 };
-window.LogsRepository = LogsRepository;
+window.StorageStrategy = StorageStrategy;
 
-class RemoteLogsRepository extends LogsRepository {
+class RemoteLogsRepository extends StorageStrategy {
 
-  pushItems(uri, itemType, params) {
-
-    //TODO: this method should return a Promise 
-    return new Promise((resolve, reject) => {
-
-      browser.storage.local.get("config").then(function(result) {
-
-        var endpoint = result.config["items-repo-uri"];
-        const payload = Object.assign({}, { //TODO: this is the same step as in the local strategy 
-          owner: 'no_reply@lifia.info.unlp.edu.ar',
-          type: itemType,
-          url: uri,
-          groups: ['public'],
-        }, params);
-
-        const req = new XMLHttpRequest();
-        req.open('PATCH', endpoint, false);
-        req.setRequestHeader("Content-type", "application/json");
-        const postItemRequest = JSON.stringify(payload);
-        req.send(postItemRequest);
-
-        resolve(req);
+  submit(payload, service) {
+    
+    axios
+      .post(this.apiUrl + service, payload) 
+      .catch(function(error) {
+        console.log("Error posting: ", error);
       });
+  }
+
+  /**
+   * @id the id of the session to retrieve
+   * @returns a Promise that resolves to the server response
+   */
+  getExperimentDesignFromServer(id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(this.apiUrl + "/experiments/" + id)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(error => {
+          console.log("catched the error");
+          reject(error);
+        });
     });
   }
 };
 window.RemoteLogsRepository = RemoteLogsRepository;
 
-class LocalLogsRepository extends LogsRepository {
+class LocalLogsRepository extends StorageStrategy {
+
+  submit(payload, service) {
+    
+    browser.storage.local.get("experimentLogs").then(function(result) {
+
+      if(result.experimentLogs){
+        console.log(result.experimentLogs);
+      }else result.experimentLogs = [console.log(payload)];
+
+      console.log(result.experimentLogs);
+    });
+  }
+
+  /**
+   * @id the id of the session to retrieve
+   * @returns a Promise that resolves to the server response
+   */
+  getExperimentDesignFromServer(id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(this.apiUrl + "/experiments/" + id)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(error => {
+          console.log("catched the error");
+          reject(error);
+        });
+    });
+  }
   
   pushItems(uri, itemType, params) {
 

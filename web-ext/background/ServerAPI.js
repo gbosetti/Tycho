@@ -1,37 +1,23 @@
 class ServerAPI {
 
   setApiUrl(url) {
-    this.apiUrl = url;
+    this.storageStrategy.setApiUrl(url);
+  }
+
+  setStorageStrategy (storage) {
+      this.storageStrategy = storage;
   }
   
   submit(payload, service) {
 
-    axios
-      .post(this.apiUrl + service, payload) 
-      .catch(function(error) {
-        console.log("Error posting: ", error);
-      });
+    this.storageStrategy.submit(payload, service);
   }
 
   submitTaskReport(report) {
-    this.submit(report, "/task-results/");
+    this.storageStrategy.submitTaskReport(report);
   }
 
-  /**
-   * @id the id of the session to retrieve
-   * @returns a Promise that resolves to the server response
-   */
-  getExperimentDesignFromServer(id) {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(this.apiUrl + "/experiments/" + id)
-        .then(response => {
-          resolve(response);
-        })
-        .catch(error => {
-          console.log("catched the error");
-          reject(error);
-        });
-    });
+  getExperimentDesignFromServer(){
+    return this.storageStrategy.getExperimentDesignFromServer();
   }
 }

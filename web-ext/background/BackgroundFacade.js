@@ -13,8 +13,12 @@ class BackgroundFacade extends Facade {
     constructor() {
         super();
         this.experiment = null;
-        this.serverApi = new ServerAPI();
+        this.serverApi = new ServerAPI(); 
         this.visible = true;
+    }
+
+    setStorageStrategy (storage) {
+        this.serverApi.setStorageStrategy(storage);
     }
 
     static getSingleton() {

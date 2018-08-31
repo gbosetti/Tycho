@@ -9,12 +9,14 @@ var updateIcon = function() {
     }
 };
 
+var updateFacadeStorage = function(config){
+    var storage = new window[config.storageStrategy](config.storageParameters); 
+    facade.setStorageStrategy(storage);
+}
+
 var startBackground = function(config) {
 
-    console.log(config.storageStrategy);
-    var storage = new window[config.storageStrategy](config.storageParameters); 
-    console.log(storage);
-    facade.setStorageStrategy(storage);
+    updateFacadeStorage(config);
 
     browser.runtime.onMessage.addListener(rmcRequest => {
         return facade.handle(rmcRequest);
@@ -32,7 +34,8 @@ var startBackground = function(config) {
 
     browser.storage.onChanged.addListener((change, area) => {
         if (area == "local" && change.config) {
-            facade.setApiUrl(change.config.newValue.apiUrl);
+            //facade.setApiUrl(change.config.newValue.apiUrl);
+            updateFacadeStorage(change.config);
         }
     });
 
