@@ -43,6 +43,9 @@ var startBackground = function(config) {
 
 function checkExpectedParameters(config){
 
+    if (config == undefined)
+        return false;
+
     var foundParams = ["storageStrategy", "apiUrl"].filter(param => config.hasOwnProperty(param));
     return (config.length == foundParams.length);
 }
